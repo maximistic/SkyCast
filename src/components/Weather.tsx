@@ -49,6 +49,7 @@ const Weather = ({ currData, data }: WeatherProps) => {
         backgroundColor: 'rgba(255, 87, 51, 0.3)',
         fill: true,
         spanGaps: true,
+        tension: 0.4, // Slightly smoother lines
       },
     ],
   };
@@ -63,14 +64,29 @@ const Weather = ({ currData, data }: WeatherProps) => {
         },
       },
       y: {
-        max: 60,
         grid: {
           display: false,
+          borderColor: '#ddd',
+          borderWidth: 1,
+          color: 'rgba(0,0,0,0.1)',
+        },
+        max: 60,
+        ticks: {
+          stepSize: 5,
+          font: {
+            family: 'Arial, sans-serif',
+            size: 12,
+            weight: 'bold',
+            color: '#555',
+          },
         },
       },
     },
     plugins: {
       tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#fff',
+        bodyColor: '#fff',
         callbacks: {
           label: function (context: any) {
             const index = context.dataIndex;
@@ -84,81 +100,94 @@ const Weather = ({ currData, data }: WeatherProps) => {
           },
         },
       },
+      legend: {
+        labels: {
+          font: {
+            family: 'Arial, sans-serif',
+            size: 14,
+            color: '#444',
+            weight: 'bold',
+          },
+        },
+      },
     },
   };
 
   return (
-        <div className="flex flex-wrap md:flex-nowrap gap-6">
-        {/* Left side container */}
-        <div
-    className={`w-full md:w-1/3 shadow-lg rounded-lg p-6 ${
-        currData?.weather[0]?.main === 'Rain'
-        ? 'bg-gradient-to-br from-blue-50 to-blue-200'
-        : currData?.weather[0]?.main === 'Clear'
-        ? 'bg-gradient-to-br from-yellow-50 to-yellow-200'
-        : currData?.weather[0]?.main === 'Clouds'
-        ? 'bg-gradient-to-br from-gray-50 to-gray-200'
-        : 'bg-gradient-to-br from-green-50 to-green-200' 
-    }`}
-    >
-    <div className="flex flex-col items-center gap-6">
-        {/* Temperature Display */}
-        <div className="text-center">
-        <span className="text-6xl font-bold text-blue-900">
-            {kelvinToCelcius(currData?.main.temp ?? 0)}°C
-        </span>
-        <p className="text-sm text-gray-600 mt-1">Feels Like: 
-            <span className="font-medium"> {kelvinToCelcius(currData?.main.feels_like ?? 0)}°C</span>
-        </p>
-        </div>
+    <div className="flex flex-wrap md:flex-nowrap gap-6">
+      {/* Left side container */}
+      <div
+        className={`w-full md:w-1/3 shadow-lg rounded-lg p-6 ${
+          currData?.weather[0]?.main === 'Rain'
+            ? 'bg-gradient-to-br from-blue-50 to-blue-200'
+            : currData?.weather[0]?.main === 'Clear'
+            ? 'bg-gradient-to-br from-yellow-50 to-yellow-200'
+            : currData?.weather[0]?.main === 'Clouds'
+            ? 'bg-gradient-to-br from-gray-50 to-gray-200'
+            : 'bg-gradient-to-br from-green-50 to-green-200'
+        }`}
+      >
+        <div className="flex flex-col items-center gap-6">
+          {/* Temperature Display */}
+          <div className="text-center">
+            <span className="text-6xl font-bold text-blue-900">
+              {kelvinToCelcius(currData?.main.temp ?? 0)}°C
+            </span>
+            <p className="text-sm text-gray-600 mt-1">
+              Feels Like:{' '}
+              <span className="font-medium">
+                {kelvinToCelcius(currData?.main.feels_like ?? 0)}°C
+              </span>
+            </p>
+          </div>
 
-        {/* Min/Max Temperature */}
-        <div className="flex justify-center items-center gap-4">
-        <p className="text-sm text-gray-600">
-            <span className="font-medium">Min:</span> {kelvinToCelcius(currData?.main.temp_min ?? 0)}°C
-        </p>
-        <p className="text-sm text-gray-600">
-            <span className="font-medium">Max:</span> {kelvinToCelcius(currData?.main.temp_max ?? 0)}°C
-        </p>
-        </div>
+          {/* Min/Max Temperature */}
+          <div className="flex justify-center items-center gap-4">
+            <p className="text-sm text-gray-600">
+              <span className="font-medium">Min:</span>{' '}
+              {kelvinToCelcius(currData?.main.temp_min ?? 0)}°C
+            </p>
+            <p className="text-sm text-gray-600">
+              <span className="font-medium">Max:</span>{' '}
+              {kelvinToCelcius(currData?.main.temp_max ?? 0)}°C
+            </p>
+          </div>
 
-        {/* Weather Description */}
-        <div className="flex items-center justify-center gap-2 text-blue-800">
+          {/* Weather Description */}
+          <div className="flex items-center justify-center gap-2 text-blue-800">
             <span className="text-lg capitalize font-medium">
-                {currData?.weather[0].description}
+              {currData?.weather[0].description}
             </span>
             <Image
-                src={`http://openweathermap.org/img/wn/${currData?.weather[0]?.icon}@2x.png`}
-                alt={currData?.weather[0]?.description}
-                width={50}
-                height={50}
-                priority
+              src={`http://openweathermap.org/img/wn/${currData?.weather[0]?.icon}@2x.png`}
+              alt={currData?.weather[0]?.description}
+              width={50}
+              height={50}
+              priority
             />
-        </div>
+          </div>
 
-        {/* Additional Info */}
-        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-            <span className="font-medium">Humidity:</span>
-            <span>{currData?.main.humidity}%</span>
+          {/* Additional Info */}
+          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">Humidity:</span>
+              <span>{currData?.main.humidity}%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium">Wind:</span>
+              <span>{currData?.wind.speed} m/s</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium">Pressure:</span>
+              <span>{currData?.main.pressure} hPa</span>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-            <span className="font-medium">Wind:</span>
-            <span>{currData?.wind.speed} m/s</span>
-        </div>
-        <div className="flex items-center gap-2">
-            <span className="font-medium">Pressure:</span>
-            <span>{currData?.main.pressure} hPa</span>
-        </div>
-        </div>
-    </div>
-    </div>
-
-
+      </div>
 
       {/* Right side chart */}
       <div className="w-full md:w-2/3 bg-white shadow-lg rounded-lg p-4">
-        <div className="w-full h-[300px]">
+        <div className="w-full h-[350px]">
           <Line data={chartData} options={chartOptions} />
         </div>
       </div>
