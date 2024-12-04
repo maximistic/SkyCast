@@ -3,7 +3,7 @@ import { format, addHours } from 'date-fns';
 import { WeatherForecastResponse } from '@/types/weather';
 import { kelvinToCelcius } from '@/utils/kelvinToCelcius';
 import { Line } from 'react-chartjs-2';
-import Container from './Container';
+import Image from 'next/image';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -88,29 +88,73 @@ const Weather = ({ currData, data }: WeatherProps) => {
   };
 
   return (
-    <div className="flex flex-wrap md:flex-nowrap gap-6">
-      {/* Left side container */}
-      <div className="w-full md:w-1/3 bg-white shadow-lg rounded-lg p-4">
-        <Container className="gap-10 px-6 items-center">
-          <div className="flex flex-col px-4">
-            <span className="text-5xl">
-              {kelvinToCelcius(currData?.main.temp ?? 0)}°C
+        <div className="flex flex-wrap md:flex-nowrap gap-6">
+        {/* Left side container */}
+        <div
+    className={`w-full md:w-1/3 shadow-lg rounded-lg p-6 ${
+        currData?.weather[0]?.main === 'Rain'
+        ? 'bg-gradient-to-br from-blue-50 to-blue-200'
+        : currData?.weather[0]?.main === 'Clear'
+        ? 'bg-gradient-to-br from-yellow-50 to-yellow-200'
+        : currData?.weather[0]?.main === 'Clouds'
+        ? 'bg-gradient-to-br from-gray-50 to-gray-200'
+        : 'bg-gradient-to-br from-green-50 to-green-200' 
+    }`}
+    >
+    <div className="flex flex-col items-center gap-6">
+        {/* Temperature Display */}
+        <div className="text-center">
+        <span className="text-6xl font-bold text-blue-900">
+            {kelvinToCelcius(currData?.main.temp ?? 0)}°C
+        </span>
+        <p className="text-sm text-gray-600 mt-1">Feels Like: 
+            <span className="font-medium"> {kelvinToCelcius(currData?.main.feels_like ?? 0)}°C</span>
+        </p>
+        </div>
+
+        {/* Min/Max Temperature */}
+        <div className="flex justify-center items-center gap-4">
+        <p className="text-sm text-gray-600">
+            <span className="font-medium">Min:</span> {kelvinToCelcius(currData?.main.temp_min ?? 0)}°C
+        </p>
+        <p className="text-sm text-gray-600">
+            <span className="font-medium">Max:</span> {kelvinToCelcius(currData?.main.temp_max ?? 0)}°C
+        </p>
+        </div>
+
+        {/* Weather Description */}
+        <div className="flex items-center justify-center gap-2 text-blue-800">
+            <span className="text-lg capitalize font-medium">
+                {currData?.weather[0].description}
             </span>
-            <p className="text-xs space-x-1 whitespace-nowrap">
-              <span>Feels Like</span>
-              <span>{kelvinToCelcius(currData?.main.feels_like ?? 0)}°C</span>
-            </p>
-            <p className="text-xs space-x-2">
-              <span>
-                Min - {kelvinToCelcius(currData?.main.temp_min ?? 0)}°C{' '}
-              </span>
-              <span>
-                Max - {kelvinToCelcius(currData?.main.temp_max ?? 0)}°C{' '}
-              </span>
-            </p>
-          </div>
-        </Container>
-      </div>
+            <Image
+                src={`http://openweathermap.org/img/wn/${currData?.weather[0]?.icon}@2x.png`}
+                alt={currData?.weather[0]?.description}
+                width={50}
+                height={50}
+                priority
+            />
+        </div>
+
+        {/* Additional Info */}
+        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+        <div className="flex items-center gap-2">
+            <span className="font-medium">Humidity:</span>
+            <span>{currData?.main.humidity}%</span>
+        </div>
+        <div className="flex items-center gap-2">
+            <span className="font-medium">Wind:</span>
+            <span>{currData?.wind.speed} m/s</span>
+        </div>
+        <div className="flex items-center gap-2">
+            <span className="font-medium">Pressure:</span>
+            <span>{currData?.main.pressure} hPa</span>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
 
       {/* Right side chart */}
       <div className="w-full md:w-2/3 bg-white shadow-lg rounded-lg p-4">

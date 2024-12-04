@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ['openweathermap.org'], // Add the external domain here
+  },
+  // Add any other configuration options here
 };
 
 export default nextConfig;
