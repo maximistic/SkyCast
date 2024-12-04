@@ -13,9 +13,13 @@
     "@emotion/styled": "^11.13.5",
     "@heroicons/react": "^2.2.0",
     "@mui/material": "^6.1.9",
+    "axios": "^1.7.9",
+    "clsx": "^2.1.1",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-query": "^3.39.3",
+    "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {
     "@types/node": "^20",
