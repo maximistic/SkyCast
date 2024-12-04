@@ -8,6 +8,9 @@
     - npm i tailwind-merge clsx
     - npm i react-query
     - npm i axios
+    - npm i date-fns 
+    - npm i chart.js react-chartjs-2
+
 
 ### Repository Structure Explanation
 
