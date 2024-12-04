@@ -1,10 +1,9 @@
-// Import necessary modules
-import { format, parseISO, isToday } from 'date-fns';
 import React from 'react';
+import { format, addHours } from 'date-fns';
 import { WeatherForecastResponse } from '@/types/weather';
-import Container from './Container';
 import { kelvinToCelcius } from '@/utils/kelvinToCelcius';
 import { Line } from 'react-chartjs-2';
+import Container from './Container';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,7 +15,6 @@ import {
   Legend,
 } from 'chart.js';
 
-// Register required chart components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type WeatherProps = {
@@ -24,26 +22,23 @@ type WeatherProps = {
   data: WeatherForecastResponse;
 };
 
-export default function Weather({ currData, data }: WeatherProps) {
+const Weather = ({ currData, data }: WeatherProps) => {
   if (!currData || !data) {
     return <p>No data available.</p>;
   }
 
-  // Filter data for today
-  const todaysData = data.list.filter((d) => isToday(parseISO(d.dt_txt)));
+  // Get the 48-hour hourly forecast data
+  const hourlyData = data.list;
 
-  // Generate 24-hour labels in 24-hour format (to match API times)
-  const hourlyLabels = Array.from({ length: 24 }, (_, index) => `${index}:00`);
+  // Generate labels for 48 hours starting from the current hour in AM/PM format
+  const now = new Date();
+  const hourlyLabels = Array.from({ length: 48 }, (_, index) =>
+    format(addHours(now, index), 'h a') // Format to 12-hour AM/PM format
+  );
 
-  // Match forecast data to hourly labels
-  const temperatureData = hourlyLabels.map((label, index) => {
-    const forecast = todaysData.find(
-      (d) => parseISO(d.dt_txt).getHours() === index
-    );
-    return forecast ? kelvinToCelcius(forecast.main.temp) : null; // Use `null` for missing data
-  });
+  // Extract temperature data for each hour
+  const temperatureData = hourlyData.map((forecast) => kelvinToCelcius(forecast.main.temp));
 
-  // Ensure Chart.js renders with smooth lines even with some missing data
   const chartData = {
     labels: hourlyLabels,
     datasets: [
@@ -53,7 +48,7 @@ export default function Weather({ currData, data }: WeatherProps) {
         borderColor: '#FF5733',
         backgroundColor: 'rgba(255, 87, 51, 0.3)',
         fill: true,
-        spanGaps: true, // Connect gaps in data
+        spanGaps: true,
       },
     ],
   };
@@ -79,18 +74,13 @@ export default function Weather({ currData, data }: WeatherProps) {
         callbacks: {
           label: function (context: any) {
             const index = context.dataIndex;
-            const forecast = todaysData.find(
-              (d) => parseISO(d.dt_txt).getHours() === index
-            );
-            if (forecast) {
-              return [
-                `Temperature: ${kelvinToCelcius(forecast.main.temp)}°C`,
-                `Feels Like: ${kelvinToCelcius(forecast.main.feels_like)}°C`,
-                `Cloudiness: ${forecast.clouds.all}%`,
-                `Wind Speed: ${forecast.wind.speed} m/s`,
-              ];
-            }
-            return 'No data for this time';
+            const forecast = hourlyData[index];
+            return [
+              `Temperature: ${kelvinToCelcius(forecast.main.temp)}°C`,
+              `Feels Like: ${kelvinToCelcius(forecast.main.feels_like)}°C`,
+              `Cloudiness: ${forecast.clouds.all}%`,
+              `Wind Speed: ${forecast.wind.speed} m/s`,
+            ];
           },
         },
       },
@@ -130,4 +120,6 @@ export default function Weather({ currData, data }: WeatherProps) {
       </div>
     </div>
   );
-}
+};
+
+export default Weather;
