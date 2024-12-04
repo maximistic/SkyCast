@@ -1,14 +1,33 @@
 import React from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { cn } from '@/utils/cn';
 
+type Props = {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  className?: string;
+  placeholder?: string; 
+};
 
-const SearchBar = () => {
+const SearchBar: React.FC<Props> = ({
+  value,
+  onChange,
+  onSubmit,
+  className,
+  placeholder = "Search", 
+}) => {
   return (
     <div className="relative w-full">
-      <form className="flex items-center h-10">
+      <form 
+        onSubmit={onSubmit}
+        className={cn("flex items-center h-10", className)}
+      >
         <input
           type="text"
-          placeholder="Search"
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
           className="w-full px-4 py-2 rounded-l-lg bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <button
