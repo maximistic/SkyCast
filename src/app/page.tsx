@@ -10,7 +10,7 @@ import formattedData from "@/utils/weatherData";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [query, setQuery] = useState({q:'pune'});
+  const [query, setQuery] = useState({q:'Riyadh'});
   const [units, setUnits] = useState('metric');
   const [weather, setWeather] = useState(null);
 
