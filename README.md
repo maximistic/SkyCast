@@ -5,6 +5,7 @@
     - (Add --legacy-peer-deps to your package.json file if you get errors)
     - npx create-next-app@latest .
     - npm install @heroicons/react
+    - npm i react-icons
     - npm i tailwind-merge clsx
     - npm i react-query
     - npm i axios

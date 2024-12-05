@@ -4,8 +4,9 @@ import { WeatherForecastResponse } from "@/types/weather";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Loading from "@/components/Loading";
-import Weather from "@/components/Weather";
-import Forecast from "@/components/Forecast";
+import Container from "@/components/Container";
+// import Weather from "@/components/Weather";
+// import Forecast from "@/components/Forecast";
 
 export default function Home() {
   const { isLoading, error, data } = useQuery<WeatherForecastResponse>('repoData', async () => {
@@ -25,9 +26,10 @@ export default function Home() {
       <Navbar />
 
       <main className="w-full px-3 max-w-7xl mx-auto flex flex-col gap-9 pb-10 pt-4">
-        {/* Pass both currData and data */}
-        <Weather currData={currData} data={data} />
-        <Forecast data={data} />
+
+        {/* <Weather currData={currData} data={data} />
+        <Forecast data={data} /> */}
+        <Container />
       </main>
     </div>
   );
