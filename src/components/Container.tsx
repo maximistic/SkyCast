@@ -7,26 +7,26 @@ import { FaTemperatureArrowUp, FaTemperatureArrowDown } from 'react-icons/fa6'
 import { TbTemperatureCelsius, TbTemperatureFahrenheit } from 'react-icons/tb'
 
 
-export default function Container(){
+export default function Container({weather: {formattedLocalTime, name, country, details, icon, temp, temp_min, temp_max, sunrise, sunset, speed, humidity, feels_like}}){
 
   const detailedInfo = [
     {
       id:1, 
       Icon: FaThermometerEmpty,
       Title: "Feels like",
-      value: "22°",
+      value: `${feels_like.toFixed()}°`,
     },
     {
       id:2, 
       Icon: BiSolidDropletHalf,
       Title: "Humidity",
-      value: "40%",
+      value: `${humidity.toFixed()}%`,
     },
     {
       id:3, 
       Icon: FiWind,
       Title: "Wind Speed",
-      value: "11 km/h",
+      value: `${speed}km/h`,
     },
   ]
 
@@ -35,27 +35,28 @@ export default function Container(){
       id:1, 
       Icon: GiSunrise,
       Title: "Sun Rise",
-      value: "5:33 AM",
+      value: sunrise,
     },
     {
       id:2, 
       Icon: GiSunset,
       Title: "Sun Set",
-      value: "6:34 PM",
+      value: sunset,
     },
     {
       id:3, 
       Icon: FaTemperatureArrowUp,
       Title: "Highest",
-      value: "32°",
+      value: `${temp_max.toFixed()}°`,
     },
     {
       id:4, 
       Icon: FaTemperatureArrowDown,
       Title: "Lowest",
-      value: "11°",
+      value: `${temp_min.toFixed()}°`,
     },
   ]
+
   return (
     <div>
       <div className='flex flex-row w-1/4 items-center justify-center'>
@@ -66,21 +67,21 @@ export default function Container(){
 
       <div className='flex items-center justify-center my-6'>
         <p className='text-xl font-extralight'>
-            Thursday, 05 December 2024 | Local Time: 12:03 PM
+           {formattedLocalTime}
         </p>
       </div>
 
       <div className='flex items-center justify-center my-3'>
-        <p className='text-3xl font-medium'>Cuddalore, India</p>
+        <p className='text-3xl font-medium'>{`${name}, ${country}`}</p>
       </div>
       <div>
         <div className='flex items-center justify-center py-6 text-xl text-cyan-300'>
-          <p> Rain </p>
+          <p> {details} </p>
         </div>
 
         <div className='flex flex-row items-center justify-between py-3'>
-          <img src='https://openweathermap.org/img/wn/01d@2x.png' alt='weather icon' className='w-20 h-20' />
-          <p className='text-5xl'> 30° </p>
+          <img src={icon} alt='weather icon' className='w-20 h-20' />
+          <p className='text-5xl'> {`${temp.toFixed()}°`} </p>
 
           <div className='flex space-y-3 flex-col items-start'>
 

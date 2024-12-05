@@ -11,6 +11,7 @@
     - npm i axios
     - npm i date-fns 
     - npm i chart.js react-chartjs-2
+    - npm i luxon
 
 
 ### Repository Structure Explanation
