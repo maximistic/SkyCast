@@ -32,9 +32,9 @@ const SearchBar: React.FC<Props> = ({
         />
         <button
           type="submit"
-          className="h-10 px-4 bg-blue-500 text-white rounded-r-lg flex items-center justify-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="h-10 px-4 bg-blue-500 text-white rounded-r-lg flex items-center justify-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-250 ease-in-out"
         >
-          <MagnifyingGlassIcon className="h-6 w-6" />
+          <MagnifyingGlassIcon className="h-6 w-6 cursor-pointer " />
         </button>
       </form>
     </div>
