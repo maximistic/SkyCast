@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Bars3Icon, XMarkIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { BiCurrentLocation } from "react-icons/bi";
 import SearchBar from "./SearchBar";
 import { toast } from "react-hot-toast"; // Make sure to install react-hot-toast

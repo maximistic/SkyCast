@@ -1,16 +1,17 @@
+"use client";
+
 import React, { useState } from 'react';
 import { BiSolidDropletHalf } from 'react-icons/bi';
-import { FaThermometerEmpty } from 'react-icons/fa';
+import { FaThermometerEmpty, FaTemperatureArrowUp, FaTemperatureArrowDown } from 'react-icons/fa';
 import { FiWind } from 'react-icons/fi';
 import { GiSunrise, GiSunset } from 'react-icons/gi';
-import { FaTemperatureArrowUp, FaTemperatureArrowDown } from 'react-icons/fa6';
 import { TbTemperatureCelsius, TbTemperatureFahrenheit } from 'react-icons/tb';
 import Image from 'next/image';
 
-const getBackgroundColor = (iconUrl) => {
+const getBackgroundColor = (iconUrl: string) => {
   const match = iconUrl.match(/\/(\d{2}[dn])@/);
   const icon = match ? match[1] : '01d';
-  
+
   const isDay = icon.includes('d');
   const baseColors = {
     '01': isDay ? 'bg-orange-300' : 'bg-blue-200',
@@ -27,10 +28,28 @@ const getBackgroundColor = (iconUrl) => {
   return baseColors[code] || 'bg-blue-100';
 };
 
-const getTextColor = (backgroundColor) => {
-  const lightBgColors = ['bg-white', 'bg-gray-300', 'bg-orange-300', 'bg-yellow-400','bg-gray-500', 'bg-blue-200' ];
+const getTextColor = (backgroundColor: string) => {
+  const lightBgColors = ['bg-white', 'bg-gray-300', 'bg-orange-300', 'bg-yellow-400', 'bg-blue-200'];
   return lightBgColors.includes(backgroundColor) ? 'text-gray-800' : 'text-white';
 };
+
+interface WeatherCardProps {
+  weather: {
+    formattedLocalTime: string;
+    name: string;
+    country: string;
+    details: string;
+    icon: string;
+    temp: number;
+    temp_min: number;
+    temp_max: number;
+    sunrise: string;
+    sunset: string;
+    speed: number;
+    humidity: number;
+    feels_like: number;
+  };
+}
 
 export default function WeatherCard({
   weather: {
@@ -48,18 +67,16 @@ export default function WeatherCard({
     humidity,
     feels_like,
   },
-}) {
+}: WeatherCardProps) {
   const [isCelsius, setIsCelsius] = useState(true);
   const backgroundColor = getBackgroundColor(icon);
   const textColor = getTextColor(backgroundColor);
 
-  const convertTemperature = (temp) => {
-    return isCelsius 
-      ? temp 
-      : (temp * 9/5) + 32;
+  const convertTemperature = (temp: number) => {
+    return isCelsius ? temp : (temp * 9 / 5) + 32;
   };
 
-  const formatTemperature = (temp) => {
+  const formatTemperature = (temp: number) => {
     const convertedTemp = convertTemperature(temp);
     return convertedTemp.toFixed();
   };
@@ -119,29 +136,25 @@ export default function WeatherCard({
           </div>
         </div>
         {/* Weather Description */}
-        <p className="text-xl font-light">{details} Sky</p>
+        <p className="text-xl font-light">{details}</p>
       </div>
 
       {/* Detailed Info */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {detailedInfo.map(({ id, Icon, Title, value }) => (
-          <div key={id} className={`flex items-center ${textColor} text-sm font-light`}>
-            <Icon size={20} className="mr-2 opacity-70" />
-            {Title}:
-            <span className="font-medium ml-1">{value}</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {detailedInfo.map((info) => (
+          <div key={info.id} className="flex items-center gap-3">
+            <info.Icon size={20} />
+            <span>{info.Title}: {info.value}</span>
           </div>
         ))}
       </div>
 
-      {/* Additional Info */}
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {otherInfo.map(({ id, Icon, Title, value }) => (
-          <div key={id} className="flex items-center gap-2">
-            <Icon size={24} className="opacity-70" />
-            <p>
-              {Title}: 
-              <span className="font-medium ml-1">{value}</span>
-            </p>
+      {/* Other Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        {otherInfo.map((info) => (
+          <div key={info.id} className="flex items-center gap-3">
+            <info.Icon size={20} />
+            <span>{info.Title}: {info.value}</span>
           </div>
         ))}
       </div>
