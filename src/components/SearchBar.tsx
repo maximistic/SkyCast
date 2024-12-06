@@ -1,13 +1,13 @@
-import React from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { cn } from '@/utils/cn';
+import React from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { cn } from "@/utils/cn";
 
 type Props = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
-  placeholder?: string; 
+  placeholder?: string;
 };
 
 const SearchBar: React.FC<Props> = ({
@@ -15,14 +15,11 @@ const SearchBar: React.FC<Props> = ({
   onChange,
   onSubmit,
   className,
-  placeholder = "Search", 
+  placeholder = "Search",
 }) => {
   return (
     <div className="relative w-full">
-      <form 
-        onSubmit={onSubmit}
-        className={cn("flex items-center h-10", className)}
-      >
+      <form onSubmit={onSubmit} className={cn("flex items-center h-10", className)}>
         <input
           type="text"
           value={value}
