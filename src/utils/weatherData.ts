@@ -110,9 +110,17 @@ const formatForecastWeather = (currentSecs, offset, list = []) => {
 
 const formattedData = async (searchParams) => {
   try {
-    const currWeather = await getWeatherData("weather", searchParams).then(
-      formatCurr
-    );
+    const currWeather = await getWeatherData("weather", searchParams).then((response) => {
+      const formatted = formatCurr(response);
+
+      return {
+        ...formatted,
+        humidity: response.main?.humidity,
+        windSpeed: response.wind?.speed,
+        pressure: response.main?.pressure,
+        visibility: response.visibility,
+      };
+    });
 
     const { dt, lat, lon, timezone } = currWeather;
 
@@ -127,6 +135,7 @@ const formattedData = async (searchParams) => {
     return { ...currWeather, ...formattedForecastWeather };
   } catch (error) {
     console.error("Error fetching or formatting weather data:", error);
+
     return {
       hourly: [],
       daily: [],
@@ -134,5 +143,6 @@ const formattedData = async (searchParams) => {
     };
   }
 };
+
 
 export default formattedData;
